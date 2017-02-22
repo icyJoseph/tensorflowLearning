@@ -14,7 +14,7 @@ to improve the results
 
 import tensorflow as tf
 import numpy as np
-from pyprogress import *
+from pyprogress import * # You probably have to pip this one
 
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
@@ -54,7 +54,7 @@ cross_entropy = tf.reduce_mean(
 """
 You built the model, now you TRAIN IT!
 """
-#This lines is one powerful command
+#This line is one powerful command
 #which adds new operations to the computation graph.
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 #it includes gradient computation, parameter update steps and apply
@@ -83,3 +83,6 @@ correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_,1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
 
 print(accuracy.eval(feed_dict = {x: mnist.test.images, y_:mnist.test.labels}))
+
+# Outputs:
+# 0.9171

@@ -13,7 +13,7 @@ y = tf.nn.softmax(tf.matmul(x,W) + b)
 """
  Hacky stuff, W * x is written as x * W in tf.matmul
  This is to deal with x being a 2D tensor
- Tracking how bad de model is by using the cost/loss function
+ Tracking how bad the model is by using the cost/loss function
  Enter, cross-entropy http://colah.github.io/posts/2015-09-Visual-Information/
 """
 y_ = tf.placeholder(tf.float32, [None, 10])
@@ -22,12 +22,12 @@ y_ = tf.placeholder(tf.float32, [None, 10])
 cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y), reduction_indices = [1]))
 # Command tensorflow to minimize cross_entropy with 0.5 steps in a given direction
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
-#Interactive session
+# Interactive session
 sess = tf.InteractiveSession()
-
+# NEVER forget to initialize the variables:
 tf.global_variables_initializer().run()
 
-# Let the TRAIN begin
+# Let the TRAINING begin
 for _ in range(1000):
     batch_xs, batch_ys = mnist.train.next_batch(100)
     sess.run(train_step, feed_dict = {x: batch_xs, y_: batch_ys})
