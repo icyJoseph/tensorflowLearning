@@ -8,4 +8,4 @@ from six.moves import xrange
 
 import tensorflow as tf
 from tensorflow.contrib.learn.python.learn.datasets.mnist import read_data_sets
-print("Successfully imported input_data!")
+print("Successfully imported input_data")

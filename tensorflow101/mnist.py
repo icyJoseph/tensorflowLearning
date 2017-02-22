@@ -6,9 +6,9 @@ NUM_CLASSES = 10
 
 # The MNIST images are 28x28 pixels
 IMAGE_SIZE = 28
-IMAGE_PIIXELS = IMAGE_SIZE * IMAGE_SIZE
+IMAGE_PIXELS = IMAGE_SIZE * IMAGE_SIZE
 
-def inference(images, hidden1_unit, hidden2_unit):
+def inference(images, hidden1_units, hidden2_units):
     """
     Build the MNIST model up to where it may
 
@@ -52,7 +52,7 @@ def inference(images, hidden1_unit, hidden2_unit):
             tf.truncated_normal([hidden2_units, NUM_CLASSES],
                                 stddev = 1.0 / math.sqrt(float(hidden2_units))),
             name = 'weights')
-        bias = tf.Variable(tf.zeros([NUM_CLASSES]),
+        biases = tf.Variable(tf.zeros([NUM_CLASSES]),
                             name = 'biases')
         logits = tf.matmul(hidden2, weights) + biases
     return logits
@@ -75,7 +75,7 @@ def loss(logits, labels):
 
     return tf.reduce_mean(cross_entropy, name = 'xentropy_mean')
 
-    def training(loss, learning_rate):
+def training(loss, learning_rate):
         """
         Sets up the training Ops.
 
@@ -94,22 +94,39 @@ def loss(logits, labels):
             train_op: The Op for training
         """
 
-        # Add a scalar summary for the snapshot loss
+    # Add a scalar summary for the snapshot loss
         tf.summary.scalar('loss', loss)
 
-        # Create the gradient descent optimizer with the given learning read_data_sets
+    # Create the gradient descent optimizer with the given learning read_data_sets
         optimizer = tf.train.GradientDescentOptimizer(learning_rate)
 
-        # Create a variable to track the global step
+    # Create a variable to track the global step
         global_step = tf.Variable(0, name = 'global_step', trainable = False)
 
-        # Use the optimizer to apply the gradients that minimize the loss
-        # (and also increment the global step counter) as a single training step
+    # Use the optimizer to apply the gradients that minimize the loss
+    # (and also increment the global step counter) as a single training step
         train_op = optimizer.minimize(loss, global_step = global_step)
         return train_op
 
-    
-
-
+def evaluation(logits, labels):
+    """
+    Evaluate the quality of the logits at predicting the label
+    Args:
+        logits: Logits tensor, float - [batch_size, NUM_CLASSES]
+        labels: Labels tensor, int32 - [batch_size], with values in
+            range [0, NUM_CLASSES]
+    Returns:
+        A scalar int32 tensor with the number of examples (out of batch_size)
+        that were predicted correctly
+    """
+    # For a classifier model, in this example,
+    # in_top_k Op is ued.
+    # It returns a bool tensor with shape [batch_size]
+    # that is true for the examples where the label is in
+    # the top k, here k = 1
+    # of all logits for that examples
+    correct = tf.nn.in_top_k(logits, labels, 1)
+    # Return the number of true entries
+    return tf.reduce_sum(tf.cast(correct, tf.int32))
 
 print("Successfully imported MNIST")
