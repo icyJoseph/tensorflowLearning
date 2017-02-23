@@ -1,3 +1,11 @@
+"""
+It is important to study this piece of code.
+1. It used two other local modules
+2. It defines stages of machine learning as functions with controlled inputs
+3. You can input args when running the script
+
+"""
+
 import argparse
 import os.path
 import sys
